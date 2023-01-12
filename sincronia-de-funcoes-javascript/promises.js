@@ -1,45 +1,30 @@
-/*
-  Obter por id e imprimir um usuário simulando que ele vem de alguma base de dados
-*/
+const users = [
+  {
+    id: 1,
+    name: 'Tanjiro',
+    email: 'onirhashira@email.com'
+  },
+  {
+    id: 2,
+    name: 'Kakashi',
+    email: 'hatake@email.com'
+  }
+]
 
-/*
-  Se tiver um id correspondente na lista de usuários, a função getUsers retornará a
-  promise com resolve passando o usuário encontrado.
-  Se não houver usuário com aquele id, retornará a promise com o reject passando a mensagem "USER NOT FOUND".
-*/
-
-function getUsers(userId) {
-  const users = [
-    {
-      id: 1,
-      name: "Tanjiro",
-      email: "tanjiro@email.com",
-      password: "umdiafuihumano",
-    },
-    {
-      id: 2,
-      name: "Nezuko",
-      email: "nezuko@email.com",
-      password: "umdiafuihumana",
-    },
-  ];
+function getUser(id) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      for (let i = 0; i < users.length; i++) {
-        if (users[i].id === userId) {
-          return resolve(users[i]);
-        }
-      }
-      reject("USER NOT FOUND");
-    }, 2000);
-  });
+      const user = users.find((currently) => currently.id === id)
+      if(!user) return reject(new Error('User not found'))
+      return resolve(user)
+    }, 1000)
+  })
 }
 
-const busca = getUsers(0);
-busca
-  .then((res) => {
-    console.log(res.name);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+getUser(0).then((res) => {
+  console.log('USER', res)
+}).catch((err) => {
+  console.error(err)
+}).finally(() => {
+  console.log('Promise finished')
+})
