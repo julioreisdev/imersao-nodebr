@@ -1,47 +1,52 @@
-/*
-  Obter por id e imprimir um usuário simulando que ele vem de alguma base de dados
-*/
+const users = [
+  {
+    id: 1,
+    name: 'Tanjiro',
+    email: 'onirhashira@email.com'
+  },
+  {
+    id: 2,
+    name: 'Kakashi',
+    email: 'hatake@email.com'
+  }
+]
 
-function getUsers(userId) {
-  const users = [
-    {
-      id: 1,
-      name: "Tanjiro",
-      email: "tanjiro@email.com",
-      password: "umdiafuihumano",
-    },
-    {
-      id: 2,
-      name: "Nezuko",
-      email: "nezuko@email.com",
-      password: "umdiafuihumana",
-    },
-  ];
+const addresses = [
+  {
+    id: 1,
+    userId: 2,
+    address: 'Konoha'
+  }
+]
+
+function getUser(id) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      for (let i = 0; i < users.length; i++) {
-        if (users[i].id === userId) {
-          return resolve(users[i]);
-        }
-      }
-      reject("USER NOT FOUND");
-    }, 2000);
-  });
+      const user = users.find((currently) => currently.id === id)
+      if(!user) return reject(new Error('User not found'))
+      return resolve(user)
+    }, 1000)
+  })
 }
 
-/* 
-  O console.log na linha 41 espera promise ser resolvida para imprimir.
-  Se cair no reject da promise da função getUsers, o catch pegará o que veio de resposta
-  e o console.log da linha 43 impimirá o erro. 
-*/
+function getAddress(userId) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const address = addresses.find((currently) => currently.userId === userId)
+      if(!address) return resolve(null)
+      return resolve(address)
+    }, 1000)
+  })
+}
 
-async function searchUser(id) {
+async function resolve() {
   try {
-    let user = await getUsers(id);
-    console.log(user);
-  } catch (error) {
-    console.log(error);
+    const user = await getUser(1)
+    const address = await getAddress(user.id)
+    console.log({user, address})
+  } catch (err) {
+    console.error(err)
   }
 }
 
-searchUser(11);
+resolve()
