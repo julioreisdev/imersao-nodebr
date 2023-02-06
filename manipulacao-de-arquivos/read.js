@@ -1,6 +1,8 @@
-import { getFile } from "./getFile.js";
+import fs from "fs";
+import { promisify } from "util";
 
-export async function read() {
-  const file = await getFile();
-  console.log(file);
+const getFile = promisify(fs.readFile);
+
+export async function read(source) {
+  console.log(await getFile(source, "utf-8"));
 }
